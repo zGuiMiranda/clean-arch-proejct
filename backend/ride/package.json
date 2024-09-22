@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-	"test": "npx jest test"
+    "test": "npx jest test"
   },
   "dependencies": {
     "@types/cors": "^2.8.17",

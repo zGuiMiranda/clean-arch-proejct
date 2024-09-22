@@ -14,7 +14,7 @@ create table ccca.account (
 );
 
 create table ccca.ride (
-	ride_id uuid,
+	ride_id uuid primary key,
 	passenger_id uuid,
 	driver_id uuid,
 	status text,
@@ -24,5 +24,16 @@ create table ccca.ride (
 	from_long numeric,
 	to_lat numeric,
 	to_long numeric,
-	date timestamp
+	date timestamp,
+	CONSTRAINT fk_passenger FOREIGN KEY (passenger_id) REFERENCES ccca.account(account_id) ON DELETE CASCADE,
+	CONSTRAINT fk_driver FOREIGN KEY (driver_id) REFERENCES ccca.account(account_id) ON DELETE CASCADE
+);
+
+create table ccca.position (
+	position_id uuid primary key,
+	ride_id uuid,
+	lat numeric,
+	long numeric,
+	date timestamp,
+	CONSTRAINT fk_ride FOREIGN KEY (ride_id) REFERENCES ccca.ride(ride_id) ON DELETE CASCADE
 );

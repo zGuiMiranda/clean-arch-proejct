@@ -9,8 +9,14 @@ import AccountController from "./infra/controller/AccountController";
 
 const httpServer = new ExpressAdapter();
 Registry.getInstance().provide("httpServer", httpServer);
-Registry.getInstance().provide("databaseConnection", new PgPromiseAdapter());
-Registry.getInstance().provide("accountRepository", new AccountRepositoryDatabase());
+Registry.getInstance().provide(
+  "databaseConnection",
+  PgPromiseAdapter.getInstance()
+);
+Registry.getInstance().provide(
+  "accountRepository",
+  new AccountRepositoryDatabase()
+);
 Registry.getInstance().provide("mailerGateway", new MailerGatewayMemory());
 Registry.getInstance().provide("signup", new Signup());
 Registry.getInstance().provide("getAccount", new GetAccount());

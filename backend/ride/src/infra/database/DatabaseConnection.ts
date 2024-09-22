@@ -1,23 +1,35 @@
 import pgp from "pg-promise";
 
 export default interface DatabaseConnection {
-	query (statement: string, params: any): Promise<any>;
-	close (): Promise<void>;
+  query(statement: string, params: any): Promise<any>;
+  close(): Promise<void>;
+  deleteAll(statement: string): Promise<void>;
 }
 
 export class PgPromiseAdapter implements DatabaseConnection {
-	connection: any;
+  connection: any;
+  private static instance: PgPromiseAdapter;
 
-	constructor () {
-		this.connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-	}
+  private constructor() {
+    this.connection = pgp()("postgres://postgres:123456@localhost:8080/app");
+  }
 
-	query(statement: string, params: any): Promise<any> {
-		return this.connection?.query(statement, params);
-	}
+  static getInstance(): PgPromiseAdapter {
+    if (!PgPromiseAdapter.instance) {
+      PgPromiseAdapter.instance = new PgPromiseAdapter();
+    }
+    return PgPromiseAdapter.instance;
+  }
 
-	async close(): Promise<void> {
-		await this.connection?.$pool.end();
-	}
+  query(statement: string, params: any): Promise<any> {
+    return this.connection?.query(statement, params);
+  }
 
+  async close(): Promise<void> {
+    await this.connection?.$pool.end();
+  }
+
+  async deleteAll(statement: string): Promise<void> {
+    await this.connection.none(statement);
+  }
 }
